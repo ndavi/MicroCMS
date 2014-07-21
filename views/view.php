@@ -11,8 +11,8 @@
     </header>
     <?php foreach ($articles as $article): ?>
         <article>
-            <h2><?= $article['art_title'] ?></h2>
-            <p><?= $article['art_content'] ?></p>
+            <h2><?= $article->getTitle() ?></h2>
+            <p><?= $article->getContent() ?></p>
         </article>
     <?php endforeach; ?>
     <footer class="footer">
