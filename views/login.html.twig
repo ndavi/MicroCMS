@@ -1,0 +1,17 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}Authentication{% endblock %}
+
+{% block content %}
+<h1>Authentication</h1>
+<form action="{{ path('admin_login_check') }}" method="post">
+    {% if error %}
+    <div class="alert alert-danger">
+        <strong>Login failed!</strong> {{ error }}
+    </div>
+    {% endif %}
+    <input type="text" name="_username" value="{{ last_username }}" required />
+    <input type="password" name="_password" value="" required />
+    <input type="submit" value="Login"/>
+</form>
+{% endblock %}

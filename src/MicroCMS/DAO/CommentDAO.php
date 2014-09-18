@@ -11,8 +11,17 @@ class CommentDAO extends DAO
      */
     protected $articleDAO;
 
+    /**
+     * @var \MicroCMS\DAO\UserDAO
+     */
+    protected $userDAO;
+
     public function setArticleDAO($articleDAO) {
         $this->articleDAO = $articleDAO;
+    }
+
+    public function setUserDAO($userDAO) {
+        $this->userDAO = $userDAO;
     }
 
     /**
@@ -46,11 +55,15 @@ class CommentDAO extends DAO
         $articleId = $row['art_id'];
         $article = $this->articleDAO->find($articleId);
 
+        // Find the associated user
+        $userId = $row['usr_id'];
+        $user = $this->userDAO->find($userId);
+
         $comment = new Comment();
         $comment->setId($row['com_id']);
-        $comment->setAuthor($row['com_author']);
         $comment->setContent($row['com_content']);
         $comment->setArticle($article);
+        $comment->setAuthor($user);
         return $comment;
     }
 }
