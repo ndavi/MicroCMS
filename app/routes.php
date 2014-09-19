@@ -15,13 +15,10 @@ $app->get('/article/{id}', function ($id) use ($app) {
     return $app['twig']->render('article.html.twig', array('article' => $article, 'comments' => $comments));
 });
 
-$app->get('/admin', function() {
-    return "Admin zone";
-});
-
+// Login form
 $app->get('/login', function(Request $request) use ($app) {
     return $app['twig']->render('login.html.twig', array(
         'error'         => $app['security.last_error']($request),
         'last_username' => $app['session']->get('_security.last_username'),
     ));
-});
+})->bind('login');  // named route so that path('login') works in Twig templates

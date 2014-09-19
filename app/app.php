@@ -16,8 +16,10 @@ $app->register(new Silex\Provider\UrlGeneratorServiceProvider());
 $app->register(new Silex\Provider\SecurityServiceProvider(), array(
     'security.firewalls' => array(
         'admin' => array(
-            'pattern' => '^/admin',
-            'form' => array('login_path' => '/login', 'check_path' => '/admin/login_check'),
+            'pattern' => '^/',
+            'anonymous' => true,
+            'logout' => true,
+            'form' => array('login_path' => '/login', 'check_path' => '/login_check'),
             'users' => $app->share(function () use ($app) {
                 $userDAO = new MicroCMS\DAO\UserDAO($app['db']);
                 $userDAO->setEncoder($app['security.encoder.digest']);
