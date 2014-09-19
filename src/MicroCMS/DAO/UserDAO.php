@@ -6,21 +6,10 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
-
 use MicroCMS\Domain\User;
 
 class UserDAO extends DAO implements UserProviderInterface
 {
-    /**
-     * @var \Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder
-     */
-    protected $encoder;
-
-    public function setEncoder($encoder)
-    {
-        $this->encoder = $encoder;
-    }
-
     /**
      * Returns a user matching the supplied id.
      *
@@ -73,7 +62,7 @@ class UserDAO extends DAO implements UserProviderInterface
     }
 
     /**
-     * Creates an User object based on a DB row.
+     * Creates a User object based on a DB row.
      *
      * @param array $row The DB row containing User data.
      * @return \MicroCMS\Domain\User

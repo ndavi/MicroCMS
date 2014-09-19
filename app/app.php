@@ -15,15 +15,13 @@ $app->register(new Silex\Provider\SessionServiceProvider());
 $app->register(new Silex\Provider\UrlGeneratorServiceProvider());
 $app->register(new Silex\Provider\SecurityServiceProvider(), array(
     'security.firewalls' => array(
-        'admin' => array(
+        'secured' => array(
             'pattern' => '^/',
             'anonymous' => true,
             'logout' => true,
             'form' => array('login_path' => '/login', 'check_path' => '/login_check'),
             'users' => $app->share(function () use ($app) {
-                $userDAO = new MicroCMS\DAO\UserDAO($app['db']);
-                $userDAO->setEncoder($app['security.encoder.digest']);
-                return $userDAO;
+                return new MicroCMS\DAO\UserDAO($app['db']);
             }),
         ),
     ),
@@ -34,9 +32,7 @@ $app['dao.article'] = $app->share(function ($app) {
     return new MicroCMS\DAO\ArticleDAO($app['db']);
 });
 $app['dao.user'] = $app->share(function ($app) {
-    $userDAO = new MicroCMS\DAO\UserDAO($app['db']);
-    $userDAO->setEncoder($app['security.encoder.digest']);
-    return $userDAO;
+    return new MicroCMS\DAO\UserDAO($app['db']);
 });
 $app['dao.comment'] = $app->share(function ($app) {
     $commentDAO = new MicroCMS\DAO\CommentDAO($app['db']);

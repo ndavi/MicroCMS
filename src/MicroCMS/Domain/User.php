@@ -32,11 +32,10 @@ class User implements UserInterface
      *
      * @var string
      */
-    protected $salt;
+    private $salt;
 
     /**
      * Role.
-     *
      * Values : ROLE_USER or ROLE_ADMIN.
      *
      * @var string
@@ -106,8 +105,7 @@ class User implements UserInterface
     /**
      * @inheritDoc
      */
-    public function eraseCredentials()
-    {
+    public function eraseCredentials() {
         // Nothing to do here
     }
 
