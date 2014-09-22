@@ -18,7 +18,7 @@
 
     <h3>Add a comment</h3>
     {% if commentFormView %}
-        <form action="#" method="post" {{ form_enctype(commentFormView) }}>
+        {{ form_start(commentFormView) }}
             <div class="form-group">
                 {{ form_errors(commentFormView.content) }}
                 {{ form_widget(commentFormView.content) }}
@@ -26,8 +26,7 @@
             <div class="form-group">
                 {{ form_row(commentFormView.save) }}
             </div>
-            {{ form_rest(commentFormView) }}
-        </form>
+        {{ form_end(commentFormView) }}
         {% for flashMessage in app.session.flashbag.get('success') %}
             <div class="alert alert-success">
                 {{ flashMessage }}

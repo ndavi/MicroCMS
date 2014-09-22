@@ -16,19 +16,17 @@ $app->get('/', function () use ($app) {
 $app->match('/article/{id}', function ($id, Request $request) use ($app) {
     $article = $app['dao.article']->find($id);
     $user = $app['security']->getToken()->getUser();
-    $commentFormView = null;
-    if ($user != 'anon.') {
-        // A user is fully authenticated
+    $commentFormView = NULL;
+    if ($app['security']->isGranted('IS_AUTHENTICATED_FULLY')) {
+        // A user is fully authenticated : he can add comments
         $comment = new Comment();
         $comment->setArticle($article);
         $comment->setAuthor($user);
         $commentForm = $app['form.factory']->create(new CommentType(), $comment);
-        if ($request->isMethod('POST')) {
-            $commentForm->bind($request);
-            if ($commentForm->isValid()) {
-                $app['dao.comment']->save($comment);
-                $app['session']->getFlashBag()->add('success', 'Your comment was succesfully added.');
-            }
+        $commentForm->handleRequest($request);
+        if ($commentForm->isValid()) {
+            $app['dao.comment']->save($comment);
+            $app['session']->getFlashBag()->add('success', 'Your comment was succesfully added.');
         }
         $commentFormView = $commentForm->createView();
     }
