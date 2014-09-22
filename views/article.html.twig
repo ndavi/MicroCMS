@@ -17,8 +17,22 @@
     {% endif %}
 
     <h3>Add a comment</h3>
-    {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-        Soon!
+    {% if commentFormView %}
+        <form action="#" method="post" {{ form_enctype(commentFormView) }}>
+            <div class="form-group">
+                {{ form_errors(commentFormView.content) }}
+                {{ form_widget(commentFormView.content) }}
+            </div>
+            <div class="form-group">
+                {{ form_row(commentFormView.save) }}
+            </div>
+            {{ form_rest(commentFormView) }}
+        </form>
+        {% for flashMessage in app.session.flashbag.get('success') %}
+            <div class="alert alert-success">
+                {{ flashMessage }}
+            </div>
+        {% endfor %}
     {% else %}
         <a href="{{ path('login') }} ">Log in</a> to add comments.
     {% endif %}

@@ -44,6 +44,23 @@ class CommentDAO extends DAO
         return $comments;
     }
 
+    public function save($comment) {
+        $commentData = array(
+            'art_id' => $comment->getArticle()->getId(),
+            'usr_id' => $comment->getAuthor()->getId(),
+            'com_content' => $comment->getContent()
+            );
+
+        if ($comment->getId()) {
+            $this->getDb()->update('t_comment', $commentData, array('com_id' => $comment->getId()));
+        } else {
+            $this->getDb()->insert('t_comment', $commentData);
+            // Get the id of the newly created comment and set it on the entity.
+            $id = $this->getDb()->lastInsertId();
+            $comment->setId($id);
+        }
+    }
+
     /**
      * Creates an Comment object based on a DB row.
      *
