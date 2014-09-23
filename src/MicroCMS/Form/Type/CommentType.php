@@ -11,16 +11,13 @@ class CommentType extends AbstractType
     {
         $builder
             ->add('content', 'textarea', array(
-                'label' => false,
                 'attr' => array(
                     'rows' => '4',
-                    'class' => 'form-control',
                     'placeholder' => 'Enter your comment',
                 )
             ))
             ->add('save', 'submit', array(
                 'label' => 'Publish comment',
-                'attr' => array('class' => 'btn btn-primary'),
             ));
     }
 
