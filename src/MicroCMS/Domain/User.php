@@ -108,24 +108,4 @@ class User implements UserInterface
     public function eraseCredentials() {
         // Nothing to do here
     }
-
-    /**
-     * @inheritDoc
-     */
-    public function equals(UserInterface $user) {
-        $class = get_class($this);
-        if (!$user instanceof $class) {
-            return false;
-        }
-        if ($this->password !== $user->getPassword()) {
-            return false;
-        }
-        if ($this->salt !== $user->getSalt()) {
-            return false;
-        }
-        if ($this->name !== $user->getUsername()) {
-            return false;
-        }
-        return true;
-    }
 }
