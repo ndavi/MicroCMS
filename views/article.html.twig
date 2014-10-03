@@ -17,20 +17,20 @@
     {% endif %}
 
     <h3>Add a comment</h3>
-    {% if commentFormView %}
-        {{ form_start(commentFormView) }}
+    {% if commentForm %}
+        {{ form_start(commentForm) }}
             <div class="form-group">
-                {{ form_errors(commentFormView.content) }}
-                {{ form_widget(commentFormView.content, { 'attr':  {
+                {{ form_errors(commentForm.content) }}
+                {{ form_widget(commentForm.content, { 'attr':  {
                     'class': 'form-control'
                 }}) }}
             </div>
             <div class="form-group">
-                {{ form_row(commentFormView.save, { 'attr':  {
+                {{ form_row(commentForm.save, { 'attr':  {
                     'class': 'btn btn-primary'
                 }}) }}
             </div>
-        {{ form_end(commentFormView) }}
+        {{ form_end(commentForm) }}
         {% for flashMessage in app.session.flashbag.get('success') %}
             <div class="alert alert-success">
                 {{ flashMessage }}

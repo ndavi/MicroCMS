@@ -34,7 +34,7 @@ $app->match('/article/{id}', function ($id, Request $request) use ($app) {
     return $app['twig']->render('article.html.twig', array(
         'article' => $article, 
         'comments' => $comments,
-        'commentFormView' => $commentFormView));
+        'commentForm' => $commentFormView));
 });
 
 // Login form

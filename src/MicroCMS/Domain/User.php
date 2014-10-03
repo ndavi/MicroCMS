@@ -18,7 +18,7 @@ class User implements UserInterface
      *
      * @var string
      */
-    private $name;
+    private $username;
 
     /**
      * User password.
@@ -54,11 +54,11 @@ class User implements UserInterface
      * @inheritDoc
      */
     public function getUsername() {
-        return $this->name;
+        return $this->username;
     }
 
-    public function setUsername($name) {
-        $this->name = $name;
+    public function setUsername($username) {
+        $this->username = $username;
     }
 
     /**
