@@ -5,6 +5,7 @@ use Symfony\Component\Debug\ErrorHandler;
 ErrorHandler::register();
 use Symfony\Component\Debug\ExceptionHandler;
 ExceptionHandler::register();
+use Symfony\Component\HttpFoundation\Response;
 
 // Register service providers.
 $app->register(new Silex\Provider\DoctrineServiceProvider());
@@ -28,6 +29,27 @@ $app->register(new Silex\Provider\SecurityServiceProvider(), array(
 ));
 $app->register(new Silex\Provider\FormServiceProvider());
 $app->register(new Silex\Provider\TranslationServiceProvider());
+$app->register(new Silex\Provider\MonologServiceProvider(), array(
+    'monolog.logfile' => $app['monolog.logfile'],
+    'monolog.name' => 'MicroCMS',
+    'monolog.level' => $app['monolog.level']
+));
+$app->register(new Silex\Provider\ServiceControllerServiceProvider());
+if (isset($app['debug']) and $app['debug']) {
+    $app->register(new Silex\Provider\WebProfilerServiceProvider(), array(
+        'profiler.cache_dir' => __DIR__.'/../var/cache/profiler'
+    ));
+}
+$app->error(function (\Exception $e, $code) use ($app) {
+    switch ($code) {
+        case 404:
+            $message = 'The requested resource could not be found.';
+            break;
+        default:
+            $message = "Something went wrong.";
+    }
+    return $app['twig']->render('error.html.twig', array('message' => $message));
+});
 
 // Register services.
 $app['dao.article'] = $app->share(function ($app) {
