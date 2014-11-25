@@ -12,6 +12,11 @@ $app->register(new Silex\Provider\DoctrineServiceProvider());
 $app->register(new Silex\Provider\TwigServiceProvider(), array(
     'twig.path' => __DIR__.'/../views',
 ));
+$app['twig'] = $app->share($app->extend('twig', function($twig, $app) {
+    $twig->addExtension(new Twig_Extensions_Extension_Text());
+    return $twig;
+}));
+$app->register(new Silex\Provider\ValidatorServiceProvider());
 $app->register(new Silex\Provider\SessionServiceProvider());
 $app->register(new Silex\Provider\UrlGeneratorServiceProvider());
 $app->register(new Silex\Provider\SecurityServiceProvider(), array(
@@ -25,6 +30,12 @@ $app->register(new Silex\Provider\SecurityServiceProvider(), array(
                 return new MicroCMS\DAO\UserDAO($app['db']);
             }),
         ),
+    ),
+    'security.role_hierarchy' => array(
+        'ROLE_ADMIN' => array('ROLE_USER'),
+    ),
+    'security.access_rules' => array(
+        array('^/admin', 'ROLE_ADMIN'),
     ),
 ));
 $app->register(new Silex\Provider\FormServiceProvider());
@@ -42,6 +53,9 @@ if (isset($app['debug']) and $app['debug']) {
 }
 $app->error(function (\Exception $e, $code) use ($app) {
     switch ($code) {
+        case 403:
+            $message = 'Access denied.';
+            break;
         case 404:
             $message = 'The requested resource could not be found.';
             break;
