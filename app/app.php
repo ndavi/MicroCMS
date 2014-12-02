@@ -2,20 +2,31 @@
 
 // Register global error and exception handlers
 use Symfony\Component\Debug\ErrorHandler;
+
 ErrorHandler::register();
+
 use Symfony\Component\Debug\ExceptionHandler;
+
 ExceptionHandler::register();
+
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
 
 // Register service providers.
 $app->register(new Silex\Provider\DoctrineServiceProvider());
 $app->register(new Silex\Provider\TwigServiceProvider(), array(
-    'twig.path' => __DIR__.'/../views',
+    'twig.path' => __DIR__ . '/../views',
 ));
 $app['twig'] = $app->share($app->extend('twig', function($twig, $app) {
-    $twig->addExtension(new Twig_Extensions_Extension_Text());
-    return $twig;
-}));
+            $twig->addExtension(new Twig_Extensions_Extension_Text());
+            return $twig;
+        }));
+$app->before(function (Request $request) {
+    if (0 === strpos($request->headers->get('Content-Type'), 'application/json')) {
+        $data = json_decode($request->getContent(), true);
+        $request->request->replace(is_array($data) ? $data : array());
+    }
+});
 $app->register(new Silex\Provider\ValidatorServiceProvider());
 $app->register(new Silex\Provider\SessionServiceProvider());
 $app->register(new Silex\Provider\UrlGeneratorServiceProvider());
@@ -48,7 +59,7 @@ $app->register(new Silex\Provider\MonologServiceProvider(), array(
 $app->register(new Silex\Provider\ServiceControllerServiceProvider());
 if (isset($app['debug']) and $app['debug']) {
     $app->register(new Silex\Provider\WebProfilerServiceProvider(), array(
-        'profiler.cache_dir' => __DIR__.'/../var/cache/profiler'
+        'profiler.cache_dir' => __DIR__ . '/../var/cache/profiler'
     ));
 }
 $app->error(function (\Exception $e, $code) use ($app) {
@@ -60,7 +71,7 @@ $app->error(function (\Exception $e, $code) use ($app) {
             $message = 'The requested resource could not be found.';
             break;
         default:
-            $message = "Something went wrong.";
+            $message = "Something went wrong." . $e->getMessage();
     }
     return $app['twig']->render('error.html.twig', array('message' => $message));
 });
@@ -78,4 +89,5 @@ $app['dao.comment'] = $app->share(function ($app) {
     $commentDAO->setUserDAO($app['dao.user']);
     return $commentDAO;
 });
+
 
